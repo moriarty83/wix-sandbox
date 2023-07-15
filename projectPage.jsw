@@ -1,25 +1,44 @@
 import wixData from 'wix-data';
 import wixLocationFrontend from 'wix-location-frontend';
 import { getProjectBySlug } from 'backend/portfolio-backend';
+import { getCollectionById } from 'backend/portfolio-backend';
 
 export function getProject(slug) {
   return getProjectBySlug(slug);
 }
 
+export function getCollection(id){
+  return getCollectionById(id)
+}
 
-$w.onReady(async function () {
+export async function getCurrentCollection(){
   let path = wixLocationFrontend.path;
   let slug = path[path.length-1]
   const result = await getProject(slug);
 
   if (result.items.length > 0) {
     const project = result.items[0];
-    console.log("project")
-    console.log(project)
+    const collections = await getCollection(project.collectionIds[0])
+    if(collections.items.length > 0){
+      return collections.items[0]
+    }
+    else{
+      return null
+    }
     // Use project data to populate your gallery or display the project details.
   } else {
-    console.log("no project")
+    return null
     // Handle case when project with the provided slug is not found.
   }
+}
+
+
+$w.onReady(async function () {
+  const currentCollection = await getCurrentCollection()
+  console.log("current collection")
+  console.log(currentCollection)
+  const categoryBanner = $w('#categorybanner')
+  categoryBanner.background.src = currentCollection.coverImage.imageInfo;
+
 });
 

@@ -5,3 +5,10 @@ export function getProjectBySlug(slug) {
     .eq('slug', slug)
     .find();
 }
+
+
+export function getCollectionById(id) {
+  return wixData.query('Portfolio/Collections')
+    .eq('_id', id)
+    .find();
+}
