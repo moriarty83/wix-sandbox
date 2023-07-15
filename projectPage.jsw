@@ -1,0 +1,25 @@
+import wixData from 'wix-data';
+import wixLocationFrontend from 'wix-location-frontend';
+import { getProjectBySlug } from 'backend/portfolio-backend';
+
+export function getProject(slug) {
+  return getProjectBySlug(slug);
+}
+
+
+$w.onReady(async function () {
+  let path = wixLocationFrontend.path;
+  let slug = path[path.length-1]
+  const result = await getProject(slug);
+
+  if (result.items.length > 0) {
+    const project = result.items[0];
+    console.log("project")
+    console.log(project)
+    // Use project data to populate your gallery or display the project details.
+  } else {
+    console.log("no project")
+    // Handle case when project with the provided slug is not found.
+  }
+});
+

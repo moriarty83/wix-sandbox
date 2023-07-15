@@ -1,7 +1,7 @@
 import wixData from 'wix-data';
 
 export function getProjectBySlug(slug) {
-  return wixData.query('PortfolioCollection')
+  return wixData.query('Portfolio/Projects')
     .eq('slug', slug)
     .find();
 }
