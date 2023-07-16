@@ -32,13 +32,30 @@ export async function getCurrentCollection(){
   }
 }
 
+export function populateBreadcrumbs(){
+    let path = wixLocationFrontend.path;
+    const breadcrumbs = $w('#breadcrumbs')
+    let breadcrumbArray = ['Portfolio']
+    for (let step of path){
+      let words = step.split('-')
+      for(let i = 0; i < words.length; i++){
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1)
+      }
+      breadcrumbArray.push(words.join(' '))
+    }
+
+    breadcrumbs.text = breadcrumbArray.join(' > ')
+
+}
+
 
 $w.onReady(async function () {
   const currentCollection = await getCurrentCollection()
-  console.log("current collection")
-  console.log(currentCollection)
-  const categoryBanner = $w('#categorybanner')
-  categoryBanner.background.src = currentCollection.coverImage.imageInfo;
+
+  
+  const categoryBanner = $w('#image6')
+  populateBreadcrumbs()
+  categoryBanner.src = currentCollection.coverImage.imageInfo;
 
 });
 
